@@ -1,0 +1,48 @@
+# TODO: dependencies
+
+#
+# variables
+#
+
+# compiler
+CC = g++
+
+# compiler options
+CFLAGS = -c -Wall -Wextra -O0 -Werror -ggdb
+
+# linker options
+LFLAGS = -lboost_thread-mt -lboost_system-mt -lpthread -ltmtp -lticp
+
+# build directory
+OBJDIR = build
+
+# source files
+SOURCES = Receiver_Example.cpp
+OBJECTS = $(addprefix $(OBJDIR)/, $(SOURCES:.cpp=.o))
+
+# executeable
+EXECUTEABLE = receiver
+
+#
+# targets
+#
+
+all: $(EXECUTEABLE)
+
+$(EXECUTEABLE): $(OBJECTS)
+	$(CC) $(OBJECTS) -o $@ $(LFLAGS)
+
+$(OBJDIR)/Receiver_Example.o: Receiver_Example.cpp
+	$(CC) $(CFLAGS) $< -o $@
+
+$(OBJECTS): | $(OBJDIR)
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+.PHONY: clean
+clean:
+	rm -rf $(OBJDIR) $(EXECUTEABLE)
+
+.PHONY: remake
+remake: clean all

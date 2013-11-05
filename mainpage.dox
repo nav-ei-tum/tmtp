@@ -1,0 +1,134 @@
+﻿/**
+\mainpage TMTP Documentation
+
+
+Welcome to the documentation webpage of our TMTP implementation!
+
+\tableofcontents
+
+\section intro Introduction
+\htmlonly
+
+<p>As part of the <a href="http://www.nav.ei.tum.de/sclab/" target="_blank">Satellite Communications Laboratory course</a> at the TUM, the objective of this project is to develop the 
+data reception components (telemetry) of a ground station in software.
+By adhering to the current European Cooperation for Space Standardization (<a href="http://www.ecss.nl/" target="_blank">ECSS</a>) standards, the resulting implementation will allow 
+interoperability between a <a href="http://ssimuc.de/content/pmwiki.php?n=Main.Phoenix" target="_blank">ground station</a> and a spacecraft.
+The intention is to use this implementation in other space projects such as the European Student Earth Orbiter (<a href="http://www.esa.int/Education/ESEO_mission" target="_blank">ESEO</a>), 
+an educational project funded by the European Space Agency (<a href="http://www.esa.int/ESA" target="_blank">ESA</a>), and the OPS-SAT, a CubeSat satellite project currently under development at ESA.</p>
+
+<p>There is much work to be done so please check the course website for more information on the available projects and how you can contribute.<br />
+Also, if you are having problems using this website or if you have any sugestions, please send an email to <a href="mailto:nav@ei.tum.de">nav@ei.tum.de</a>.</p>
+<p>(Pro tip: Don't feel confident enough to work with C++ or just got rusty on that arena? Here's a comprehensive <a href="http://www.cplusplus.com/reference/">C++ Reference</a> website 
+or check this awesome <a href="http://www.cplusplus.com/doc/tutorial/">C++ Language Tutorial</a>!)</p>
+
+\endhtmlonly
+\subsection subintro About this project
+\htmlonly
+
+<p>The <a href="http://www.ecss.nl/forums/ecss/dispatch.cgi/standards/docProfile/100651/d20080802143745/No/t100651.htm" target="_blank">TMTP</a> implementation was developed as part of the 
+Software Defined Radio (<a href="http://en.wikipedia.org/wiki/Software-defined_radio" target="_blank">SDR</a>) project, which is divided into two parts: The physical and the data link layer.</p>
+
+<p>On the data link layer, packets containing data of upper layers are segmented into frames. These frames are formatted according to the TMTP standard and sent to the physical layer for transmission.
+The physical part is where most of the SDR happens; upper-layer frames are converted into a samples and sent to a Universal Software Peripheral 
+(<a href="https://www.ettus.com/product/details/UN200-KIT" target="_blank">USRP</a>) via Ethernet, which serves as an interface between the software and an antenna. </p>
+
+<p>Physical layer aspects like the channel coding, synchronization and error correction are emulated in software with help of the 
+<a href="http://gnuradio.org/redmine/projects/gnuradio/wiki" target="_blank">GNU Radio</a> libraries, where the frame-to-sample transformation takes place.</p>
+
+\endhtmlonly
+\section SDR Software Defined Radio
+\htmlonly
+
+<p>In telecommunications, radio transmission and reception are mostly implemented in hardware. Much time and effort in design and development is invested and costs are typically high as well.</p>
+<p>SDR is an alternative to hardware-based radio systems, in which the components (e.g. filters, detectors and mixers among others) can be emulated in software.
+In our scenario, a PC running an application using TMTP will be connected to a USRP, which in turn will be connected to an antenna.</p>
+<p>A USRP is a cost-efficient radio platform device commonly used in SDR applications. It provides a range of hardware features such as clock generation, synchronization and power regulation. 
+In this project, a USRP device has been configured to send and receive frames to the antenna according to ECSS standards for synchronization, channel coding, radio frequency and modulation. 
+The configuration was done via software with GNU Radio, an open source Application Programming Interface (API).  This was achieved using GNU Radio Companion, the graphical programming environment for GNU Radio.</p>
+
+<p>The configuration of the USRP as well as the usage of GNU Radio are part of the physical layer of the SDR project and are therefore out of the scope of this project.</p>
+
+\endhtmlonly
+\section TandT Telemetry and Telecommand
+\htmlonly
+
+<p>The communication link between a ground station and a spacecraft is bidirectional. However, each data stream is divided into two categories based not on the direction, but on the purpose they serve.</p>
+<p>The data stream received from a spacecraft is called telemetry. Its purpose is data collection to perform measurements, maintenance and monitoring.</p>
+<p>Its counterpart is the telecommand, which allows commands to be sent to a spacecraft to perform specific tasks.</p>
+<p>The SDR project focuses on telemetry following the ECSS specifications.</p>
+
+<img src="../../Doxygen_Images/SDR_Telemetry_and_Telecommand.png" width="673" height="140" border="0" alt="Telemetry and Telecommand" align="middle">
+
+\endhtmlonly
+\section TMTP The Telemetry Transfer Protocol
+\htmlonly
+
+<p>Before transmitting a packet over a link, it has to be encapsulated, or wrapped, within a frame. 
+A frame typically consists of a header and a trailer that are appended at the beginning and the end of a packet, respectively.
+The appended structures contain information about the size of the packet, what kind of data is contained, the channel it belongs, etc.
+This information is read at the receiving end, the header and trailer are stripped off and the packet is then handled accordingly.</p>
+
+<p>The TMTP specifies the structure of a Telemetry Transfer Frame and how it should be transmitted over a space link.
+These frames are fixed-length data structures that serve as envelopes wrapped around variable-length packets.</p>
+
+<p>In this project asynchronous transmission is assumed, i.e. no clock synchronization takes place between sender and receiver. 
+The fixed-length of these frames makes a connection setup phase unnecessary. Right from the start, frames are sent at a constant rate and both ends know what to expect.</p>
+
+<p>The format of a TM Transfer Frame consists of several fields, positioned contiguously if present, in the sequence shown in figure below:</p>
+
+<img src="../../Doxygen_Images/TM_Frame_Overview.png" border="0" alt="TMTP Frame Format" align="middle">
+
+<p>The telemetry link specified in the TMTP standard is divided in the following channels:</p>
+
+<b>Physical Channel</b> A data channel carrying a stream of bits in a single direction.
+<li>The value of the Transfer Frame Version Number is constant for all frames of a physical channel.</li>
+<li>The length of the frames for a given physical channel is fixed for a mission phase.</li>
+<li>The physical channel is divided into at least one master channels.</li>
+<br />
+
+<b>Master Channel</b> All frames with the same Transfer Frame Version Number and Spacecraft ID.
+<li>For a typical space mission, all the frames on a physical channel have the same Spacecraft ID. Therefore there is typically only one master channel per physical channel.
+However, the ECSS standard specifies that multiple master channels can share a physical channel. This can be the case when one spacecraft is transporting another spacecraft such as a probe.</li>
+<li>This feature is currently not enabled in this project's TMTP implementation.</li>
+<br />
+
+<b>Virtual Channel</b> Subdivisions of a Master Channel. Each consists of frames with the same Virtual Channel ID.
+<li>Virtual channels enable one physical channel to be shared among multiple higher-layer data streams.</li>
+<li>There is a maximum of eight virtual channels in a given master channel.</li>
+
+<br />
+<img src="../../Doxygen_Images/Channels_Overview.png" border="0" alt="TMTP Channels Overview" align="middle">
+<br />
+
+<p>This channel scheme allows another important feature of the TMTP: multiplexing.
+By fitting packets in fixed-length frames (segmenting them if they are too long), a spacecraft can send TM Frames at a constant rate over the different virtual channels in 
+parallel as shown in the figure below:</p>
+
+<img src="../../Doxygen_Images/SDR_Multiplexing.png" width="612" height="348" border="0" alt="TMTP Multiplexing" align="middle">
+
+<p>Therefore we can say that the key features of the TMTP are:</p>
+<li>Fixed-length frame format.</li>
+<li>Asynchronous, variable-length packet encapsulation.</li>
+<li>Basic CRC error detection mechanism.</li>
+<li>Multiplexing for upper-layer protocols in virtual channels.</li>
+<li>Support for four virtual channels. Can be expanded up to eight.</li>
+
+\endhtmlonly
+\section standards Standards
+\htmlonly
+
+<p>In order to serve the purposes and meet the requirements of the ESEO mission, this project has to comply with the current European standards.
+The ECSS standards used here, are implementations based on the recommendation of the Consultative Committee for Space Data Systems (<a href="http://public.ccsds.org/default.aspx" target="_blank">CCSDS</a>).
+The CCSDS is an international forum for standards development in the field of space communications and data handling. 
+By adhering to these standards, interoperability across space agencies world wide is ensured.</p>
+
+<p>The Space Engineering Branch of ECSS standards contain the definitions of the core aspects of this project, namely:</p>
+
+<li> ECSS-E-ST-50-01C: Synchronization and Channel Coding (physical layer).</li>
+<li> ECSS-E-ST-50-05C_Rev2: Radio Frequency and modulation (physical layer).</li>
+<li> ECSS-E-ST-50-03C: Telemetry Transfer Frame Protocol (data link layer).</li>
+<img src="../../Doxygen_Images/SDR_Relevant_Standards.png" width="338" height="370" border="0" alt="SDR Relevant ECSS Standards">
+
+\endhtmlonly
+
+*/
