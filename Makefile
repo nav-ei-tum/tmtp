@@ -9,7 +9,7 @@ CC = g++
 CFLAGS = -O2 -Wall
 
 # linker options
-LFLAGS = -shared -fPIC -lboost_thread-mt -lboost_system-mt -lpthread -lticp
+LFLAGS = -shared -fPIC -lboost_thread-mt -lboost_system-mt -lpthread
 
 # source files
 SOURCES = GroundOcfServer.cpp \

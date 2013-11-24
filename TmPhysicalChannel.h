@@ -4,7 +4,6 @@
 #include "myErrors.h"
 #include "TmFrameTimestamp.h"
 #include "TmFrameBitrate.h"
-#include "ticp/TicpTimestamp.hpp"
 
 #include <vector>
 #include <string>
@@ -114,11 +113,11 @@ class TmPhysicalChannel {
 		virtual TmChannelWarning receiveFrame(vector<uint8_t> rawFrame, TmFrameTimestamp timestamp, TmFrameBitrate bitrate);
 
 /*! \brief Prepares a new TM Transfer Frame to be sent over a master- and virtual channel, if defined.
- * \param timestamp The timestamp received from the TICP namespace.
+ * \param timestamp The timestamp at which the frame will be send.
  *
  * \note May throw TmPhysicalChannelError or TmMasterChannelError.
  */
-		virtual vector<uint8_t> sendFrame(ticp::Timestamp timestamp);
+		virtual vector<uint8_t> sendFrame(TmFrameTimestamp timestamp);
 
 	// variables
 	protected:

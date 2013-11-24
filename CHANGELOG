@@ -1,0 +1,12 @@
+Original Version	by Quirin Funke
+					First implementation of the Telemetry Transfer Frame Protocol
+
+5th Nov. 2013		by Octavio Rodriguez Cervantes
+					Conversion into a shared library
+					Addition of Timestamp passing
+					Various Bugfixes
+
+24th Nov. 2013		by Martin Lülf
+					Remove dependency on TICP
+					Add GPL license and notice
+					Add README and CHANGELOG

@@ -5,7 +5,7 @@
 #include "myErrors.h"
 #include "TmFrameTimestamp.h"
 #include "TmFrameBitrate.h"
-#include "ticp/TicpTimestamp.hpp"
+#include "TmFrameTimestamp.h"
 
 #include <boost/function.hpp>
 
@@ -185,7 +185,7 @@ public:
 	virtual TmChannelWarning receiveFrame(TmTransferFrame frame);
 	
 /*! \brief Creates a new TM frame, adjusts its settings and populates its Data Field.
- * \param timestamp TICP timestamp (only used if transmitting navigation messages).
+ * \param timestamp TmFrameTimestamp when the frame will be send.
  *
  * This member function starts by creating a TM Transfer Frame and adjusting its settings to match those set in the master- and virtual channel it belongs. \n
  *	- Default First Header Pointer = fhpNoFirstHeader.
@@ -238,7 +238,7 @@ public:
  * 
  *	\note May throw TmVirtualChannelError.
  */
-	virtual TmTransferFrame sendFrame(ticp::Timestamp timestamp);
+	virtual TmTransferFrame sendFrame(TmFrameTimestamp timestamp);
 
 /*!	\brief Establishes the sink where received packets will be placed (GroundPacketServer instance).
  *	\param sink Pointer to the packet sink to which this channel has been connected.
@@ -262,19 +262,19 @@ public:
  * For example, the contents may be navigation data, which is NOT encapsulated in packets. Therefore, writing the Data Field in "normal packet mode" will not work.
  */
 	virtual void connectDirectSendDataFieldAccessFunction(
-			boost::function<vector<uint8_t>(uint16_t, ticp::Timestamp)> function);
+			boost::function<vector<uint8_t>(uint16_t, TmFrameTimestamp)> function);
 
 /*!	\brief Specifies the function used to access the raw data in the the Data Field of a received frame.
  *	\param function A function object wrapper using the boost libraries.
  *
  * Receives a function wrapper called "function" - In other words, it is a placeholder for functions. 
- * In this case it takes an vector of bytes (passed by reference) and a TICP timestamp and returns void. \n
+ * In this case it takes an vector of bytes (passed by reference) and a TmFrameTimestamp and returns void. \n
  * These Direct Data Field Access functions are used to implement alternative methods of extracting data.
  * The Data field may contain "raw data" with a very specific format and it could only be read in a very specific way. \n
  * For example, the contents may be navigation data, which is NOT encapsulated in packets. Therefore, reading the Data Field in "normal packet mode" will not work.
  */
 	virtual void connectDirectRecvDataFieldAccessFunction(
-			boost::function<void(vector<uint8_t> const&, ticp::Timestamp)> function);
+			boost::function<void(vector<uint8_t> const&, TmFrameTimestamp)> function);
 
 /*! \brief Sets the debug output flag to TRUE. */
 	virtual void activateDebugOutput();
@@ -314,10 +314,10 @@ protected:
 	
 	// Function object wrappers - boost library.
 	/*! Placeholder for a function that implements direct Data Field access to prepare packets for transmission. */
-	boost::function<vector<uint8_t>(uint16_t, ticp::Timestamp)> directSendDataFieldAccessFunction;
+	boost::function<vector<uint8_t>(uint16_t, TmFrameTimestamp)> directSendDataFieldAccessFunction;
 	
 	/*! Placeholder for a function that implements direct Data Field access to read received packets. */
-	boost::function<void(vector<uint8_t> const&, ticp::Timestamp)> directRecvDataFieldAccessFunction;
+	boost::function<void(vector<uint8_t> const&, TmFrameTimestamp)> directRecvDataFieldAccessFunction;
 
 	// buffers
 	queue<vector<uint8_t> > sendFifo;			/*!< Output queue - Temporarily stores packets before sending them. */

@@ -1,11 +1,27 @@
+/**
+        Copyright 2013 Institute for Communications and Navigation, TUM
+
+        This file is part of tmtp.
+
+tmtp is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+any later version.
+
+tmtp is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with tmtp. If not, see <http://www.gnu.org/licenses/>.
+*/
 #include "TmPhysicalChannel.h"
 #include "TmMasterChannel.h"
 #include "TmTransferFrame.h"
 #include "TmFrameTimestamp.h"
 #include "TmFrameBitrate.h"
 #include "myErrors.h"
-
-#include "ticp/TicpTimestamp.hpp"
 
 #include <vector>
 #include <iostream>
@@ -128,7 +144,7 @@ TmChannelWarning TmPhysicalChannel::receiveFrame(vector<uint8_t> rawFrame, TmFra
 }
 
 // Prepares a new TM Transfer Frame to be sent over a master- and virtual channel, if defined.
-vector<uint8_t> TmPhysicalChannel::sendFrame(ticp::Timestamp timestamp)
+vector<uint8_t> TmPhysicalChannel::sendFrame(TmFrameTimestamp timestamp)
 {
 	vector<uint8_t> rawFrame;	// Declares a variable to store the raw frame to send.
 

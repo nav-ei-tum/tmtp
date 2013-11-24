@@ -1,3 +1,21 @@
+/**
+        Copyright 2013 Institute for Communications and Navigation, TUM
+
+        This file is part of tmtp.
+
+tmtp is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+any later version.
+
+tmtp is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with tmtp. If not, see <http://www.gnu.org/licenses/>.
+*/
 #include "TmVirtualChannel.h"
 #include "TmTransferFrame.h"
 #include "TmMasterChannel.h"
@@ -6,7 +24,7 @@
 #include "GroundPacketServer.h"
 #include "NetProtConf.h"
 #include "myErrors.h"
-#include "ticp/TicpTimestamp.hpp"
+#include "TmFrameTimestamp.h"
 
 #include <boost/function.hpp>
 
@@ -246,7 +264,7 @@ TmChannelWarning TmVirtualChannel::receiveFrame(TmTransferFrame frame)
 			if (directDataFieldAccess) {
 				if (directRecvDataFieldAccessFunction) {
 					// TODO timestamp processing
-					directRecvDataFieldAccessFunction(data,ticp::Timestamp());
+					directRecvDataFieldAccessFunction(data,TmFrameTimestamp());
 				} else {
 					throw TmVirtualChannelError(virtualChannelId,
 							"Direct data field access configured but corresponding receive function "
@@ -359,7 +377,7 @@ TmChannelWarning TmVirtualChannel::receiveFrame(TmTransferFrame frame)
 }
 
 // Creates a new TM frame, adjusts its settings and populates its Data Field.
-TmTransferFrame TmVirtualChannel::sendFrame(ticp::Timestamp timestamp)
+TmTransferFrame TmVirtualChannel::sendFrame(TmFrameTimestamp timestamp)
 {
 	vector<uint8_t> data;				// Vector holding data for preparation to be encapsulated in the frame.
 	uint64_t availableDataLength;		// Space available in the Data Field to host a packet (in Bytes).
@@ -508,14 +526,14 @@ void TmVirtualChannel::setNetProtConf(NetProtConf *conf)
 
 // Specifies the function used to directly access the Data Field in order to transmit.
 void TmVirtualChannel::connectDirectSendDataFieldAccessFunction(
-		boost::function<vector<uint8_t>(uint16_t, ticp::Timestamp)> function)
+		boost::function<vector<uint8_t>(uint16_t, TmFrameTimestamp)> function)
 {
 	directSendDataFieldAccessFunction = function;
 }
 
 // Specifies the function used to directly access the Data Field of a received frame.
 void TmVirtualChannel::connectDirectRecvDataFieldAccessFunction(
-		boost::function<void(vector<uint8_t> const&, ticp::Timestamp)> function)
+		boost::function<void(vector<uint8_t> const&, TmFrameTimestamp)> function)
 {
 	directRecvDataFieldAccessFunction = function;
 }

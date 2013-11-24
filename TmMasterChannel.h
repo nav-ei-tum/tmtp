@@ -3,7 +3,7 @@
 
 #include "TmOcf.h"
 #include "myErrors.h"
-#include "ticp/TicpTimestamp.hpp"
+#include "TmFrameTimestamp.h"
 
 #include <queue>
 #include <vector>
@@ -156,7 +156,7 @@ public:
 	virtual TmChannelWarning receiveFrame(TmTransferFrame frame);
 
 /*! \brief Prepares a frame according to the physical channel settings to be sent over a virtual channel and appends a timestamp.
- *	\param timestamp A Timestamp as specified in the TICP namespace.
+ *	\param timestamp A Timestamp as specified in the TmFrameTimestamp class.
  * 
  * Creates a TM Transfer Frame with the minimum size and redimentions it to the size configured in the physical channel. \n
  * Using a Round Robin scheduling cycles through all of the channels looking for a VC with a frame available to be sent. Once found, prepares the frame to be sent. \n
@@ -169,7 +169,7 @@ public:
  *
  * \note May throw TmMasterChannelError.
  */
-	virtual TmTransferFrame sendFrame(ticp::Timestamp timestamp);
+	virtual TmTransferFrame sendFrame(TmFrameTimestamp timestamp);
 
 /*! \brief Establishes the sink where OCF messages are received (GroundOcfServer instance).
  * \param sink Pointer to the OCF Sink to which this channel has been connected.

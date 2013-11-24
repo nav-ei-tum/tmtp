@@ -1,0 +1,38 @@
+=== Overview ===
+This library implements the ECSS Telemetry Transfer Frame Protocol ECSS-E-ST-50-03C.
+
+
+=== How to install ===
+The TMTP library depends on the C++ library boost.
+
+The library can be compiled with
+make
+sudo make install
+
+To generate the API documentation doxygen is required and can be run with
+make doc
+
+The library will be installed under the PREFIX /usr/local
+
+
+=== License ===
+Copyright 2013 Institute for Communications and Navigation, TUM
+
+        This file is part of tmtp.
+
+tmtp is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+any later version.
+
+tmtp is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with tmtp. If not, see <http://www.gnu.org/licenses/>.
+
+
+=== Feedback ===
+We are always happy to receive feedback or patched. If you plan to use this library for a real spacecraft mission, we would love to hear about it.
