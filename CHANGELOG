@@ -1,5 +1,6 @@
 Original Version	by Quirin Funke
-					First implementation of the Telemetry Transfer Frame Protocol
+					First implementation of the Telemetry Transfer Frame
+					Protocol
 
 5th Nov. 2013		by Octavio Rodriguez Cervantes
 					Conversion into a shared library

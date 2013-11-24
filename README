@@ -1,5 +1,6 @@
 === Overview ===
-This library implements the ECSS Telemetry Transfer Frame Protocol ECSS-E-ST-50-03C.
+This library implements the ECSS Telemetry Transfer Frame Protocol
+ECSS-E-ST-50-03C.
 
 
 === How to install ===
@@ -35,4 +36,5 @@ along with tmtp. If not, see <http://www.gnu.org/licenses/>.
 
 
 === Feedback ===
-We are always happy to receive feedback or patched. If you plan to use this library for a real spacecraft mission, we would love to hear about it.
+We are always happy to receive feedback or patched. If you plan to use this
+library for a real spacecraft mission, we would love to hear about it.
