@@ -1,1 +1,5 @@
 libtmtp.so
+Examples/build
+Examples/sender
+Examples/receiver
+

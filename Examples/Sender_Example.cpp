@@ -38,7 +38,7 @@ class TmSender : private ticp::Server<ticp::data_v2_t>
 
 	private:
 /*!	\brief Generates a TICPv2 Frame. 
- *	\param timestamp TICP timestamp appended to the Frame.
+ *	\param timestamp TMTP timestamp appended to the Frame.
  */
 		ticp::data_v2_t genFrame(ticp::Timestamp timestamp);
 
@@ -96,8 +96,14 @@ ticp::data_v2_t TmSender::genFrame(ticp::Timestamp timestamp)
 	ticp::data_v2_t frame;
 	const ticp::type_t type = 0;
 	ticp::data_v1_t data;
+	
+	// Convert from TICP to TMTP timestamp
+	TmFrameTimestamp t;
+	t.setSeconds(timestamp.getSeconds());
+	t.setFractions(timestamp.getFraction());
+	
 	try {
-		data = sendPc->sendFrame(timestamp);
+		data = sendPc->sendFrame(t);
 	} catch (TmPhysicalChannelError& e) {
 		cout << "Error in TmPhysicalChannel: " << e.what() << endl;
 	}
