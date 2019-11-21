@@ -1,3 +1,5 @@
+Doxygen_Documentation
+build*
 libtmtp.so
 Examples/build
 Examples/sender
