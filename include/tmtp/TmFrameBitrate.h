@@ -19,7 +19,7 @@ class TmFrameBitrate {
 // definitions
 //
 protected:
-	static const double bpsInitPattern = 0x0F0F0F0F0F0F0F0F;		/*!< Initialization pattern for the bitrate. While stored in variable bps, means no bitrate has been provided. */
+	static const double bpsInitPattern;		/*!< Initialization pattern for the bitrate. While stored in variable bps, means no bitrate has been provided. */
 	
 //
 // methods
@@ -29,7 +29,7 @@ protected:
 /*! \brief Constructor of the Bitrate class. */
 		TmFrameBitrate();
 
-/*! \brief Sets the bitrate in bits per second. 
+/*! \brief Sets the bitrate in bits per second.
  *	\param bps bitrate in bps.
  */
 		virtual void setBitrate(double rate);

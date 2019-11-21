@@ -24,6 +24,8 @@ along with tmtp. If not, see <http://www.gnu.org/licenses/>.
 
 using namespace std;
 
+const double TmFrameBitrate::bpsInitPattern = 0x0F0F0F0F0F0F0F0F;
+
 // Constructor of the Bitrate class.
 TmFrameBitrate::TmFrameBitrate()
 {
